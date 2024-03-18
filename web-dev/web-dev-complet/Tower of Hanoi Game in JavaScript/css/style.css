@@ -1,0 +1,63 @@
+* {
+  padding: 0;
+  margin: 0;
+  font-family: sans-serif;
+}
+
+#debug {
+  display: none;
+  margin: 5em 0 0 5em;;
+}
+
+#debug * {
+  padding: 0.1em;
+}
+
+#introduction, #victory-notification {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  
+}
+
+#introduction-message, #victory-message {
+  background-color: #fff;
+}
+
+#introduction-message {
+  padding: 2em;
+  width: 30em;
+  /* TODO: remove hardcoded value for margin-top. */
+  margin: 220px auto 0 auto;
+}
+
+#introduction-message > p {
+  margin-top: 0.4em;
+  margin-bottom: 1.3em;
+}
+
+#victory-notification {
+  display: none;
+}
+
+#victory-message {
+  margin: 20% auto 0 auto;
+  width: 25em;
+  padding: 1em;
+}
+
+#victory-message > h1 {
+  text-align: center;
+}
+
+#victory-message > p {
+  padding-top: 1.4em;
+}
+
+input {
+  border: solid 1px #333;
+  background-color: #dedede;
+  padding: 0.2em;
+}

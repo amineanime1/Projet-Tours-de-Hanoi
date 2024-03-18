@@ -95,66 +95,63 @@
             ev.preventDefault();
         }
 
-        let draggedDisks = []; // Array to keep track of dragged disks
-
-function drag(ev) {
-    console.log("Drag Start:", ev.target.id); // Logging the ID of the dragged element
-    ev.dataTransfer.setData("text", ev.target.dataset.size); // Set custom data attribute with disk size
-}
-
-function drop(ev) {
-    ev.preventDefault();
-    let data = ev.dataTransfer.getData("text"); // Retrieve size of dragged disk
-    let targetTower = ev.target.closest('.tower');
-    let targetDisk = ev.target.closest('.disk');
-    let draggedDisk = document.querySelector('.disk[data-size="' + data + '"]:not(.dragged)');
-    console.log("Dropped Disk:", draggedDisk ? draggedDisk.id : "Dragged disk is null");
-    console.log("Target Tower:", targetTower ? targetTower.id : "Target tower is null");
-    console.log("Target Disk:", targetDisk ? targetDisk.id : "No disk");
-    
-    // Check if dragged disk exists
-    if (!draggedDisk) {
-        console.log("Error: Dragged disk is null.");
-        return;
-    }
-    
-    // Check if the target tower is valid
-    if (!targetTower) {
-        console.log("Error: Target tower is null.");
-        return;
-    }
-
-    // Check if there is a valid target disk
-    if (!targetDisk || targetDisk === draggedDisk.previousElementSibling) {
-        // Check if the dragged disk is the topmost disk on its tower
-        let towerOfDraggedDisk = draggedDisk.parentElement;
-        let topDiskOfTower = towerOfDraggedDisk.lastElementChild;
-        if (draggedDisk !== topDiskOfTower) {
-            console.log("Error: You can only move the topmost disk.");
-            return;
-        }
-
-        // Continue with drop logic
-        if (targetTower.children.length === 0) {
-            targetTower.appendChild(draggedDisk.cloneNode(true));
-        } else {
-            let disksInTargetTower = Array.from(targetTower.querySelectorAll('.disk'));
-            let targetDiskSize = Number(draggedDisk.dataset.size);
-            let smallestDiskInTargetTower = Math.min(...disksInTargetTower.map(disk => Number(disk.dataset.size)));
-            if (targetDiskSize < smallestDiskInTargetTower) {
-                targetTower.insertBefore(draggedDisk.cloneNode(true), disksInTargetTower[0]);
+        function drag(ev) {
+            let disk = ev.target;
+            let tower = disk.parentElement;
+            let topDisk = tower.lastElementChild;
+            if (disk === topDisk) {
+                console.log("Drag Start:", ev.target.id);
+                ev.dataTransfer.setData("text", ev.target.dataset.size);
+            } else {
+                console.log("Error: You can only drag the topmost disk of a tower.");
+                ev.preventDefault(); // Prevent dragging the disk
             }
         }
         
-        // Add the dragged disk to the array of dragged disks
-        draggedDisks.push(draggedDisk);
+        function drop(ev) {
+            ev.preventDefault();
+            let data = ev.dataTransfer.getData("text");
+            let targetTower = ev.target.closest('.tower');
+            let targetDisk = ev.target.closest('.disk');
+            let draggedDisk = document.querySelector('.disk[data-size="' + data + '"]');
+            
+            if (!draggedDisk || !targetTower) {
+                console.log("Error: Invalid move.");
+                return;
+            }
         
-        // Remove the original disk from its tower
-        draggedDisk.classList.add('dragged'); // Add a class to mark this disk as dragged
-        draggedDisk.style.display = 'none'; // Hide the original disk
-    }
-    checkWinCondition();
-}
+            let disksInTargetTower = Array.from(targetTower.querySelectorAll('.disk'));
+            let targetDiskSize = Number(draggedDisk.dataset.size);
+            let smallestDiskInTargetTower = disksInTargetTower.length > 0 ? Math.min(...disksInTargetTower.map(disk => Number(disk.dataset.size))) : 0;
+        
+            if (targetDisk === null || targetDisk === undefined) {
+                targetTower.appendChild(draggedDisk.cloneNode(true));
+            } else if (targetDiskSize < smallestDiskInTargetTower || disksInTargetTower.length === 0) {
+                targetTower.insertBefore(draggedDisk.cloneNode(true), disksInTargetTower[0]);
+            } else {
+                console.log("Error: You cannot place a larger disk on top of a smaller one.");
+                return;
+            }
+        
+            let towerOfDraggedDisk = draggedDisk.parentElement;
+            towerOfDraggedDisk.removeChild(draggedDisk);
+        
+            // Remove event listeners from all disks
+            let disks = document.querySelectorAll('.disk');
+            disks.forEach(disk => {
+                disk.removeEventListener('dragstart', drag);
+            });
+        
+            // Reattach drag event listeners to all disks
+            disks.forEach(disk => {
+                disk.addEventListener('dragstart', drag);
+            });
+        
+            checkWinCondition();
+        }
+        
+
+
         function checkWinCondition() {
             let tower3 = document.getElementById('tower3');
             if (tower3.children.length === parseInt(document.getElementById('diskNumber').value)) {
