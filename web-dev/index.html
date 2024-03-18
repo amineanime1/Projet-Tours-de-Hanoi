@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tours de Hanoï</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .tower {
+            width: 150px;
+            height: 300px;
+            border: 2px solid black;
+            display: inline-block;
+            margin: 0 50px;
+            vertical-align: top;
+            position: relative;
+            text-align: center;
+        }
+        .disk {
+            background-color: #2196F3;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: absolute;
+            bottom: 0;
+        }
+        .disk span {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <label for="diskNumber">Choisissez un nombre de disques (entre 3 et 8) :</label>
+    <input type="number" id="diskNumber" min="3" max="8" value="3">
+    <button onclick="startGame()">Commencer</button>
+
+    <div id="towersContainer"></div>
+
+    <script>
+        function startGame() {
+            let numberOfDisks = document.getElementById('diskNumber').value;
+            if (numberOfDisks < 3 || numberOfDisks > 8) {
+                alert("Veuillez choisir un nombre entre 3 et 8.");
+                return;
+            }
+            let towersContainer = document.getElementById('towersContainer');
+            towersContainer.innerHTML = ""; // Clear previous towers
+
+            // Create towers
+            for (let i = 1; i <= 3; i++) {
+                let tower = document.createElement('div');
+                tower.className = 'tower';
+                tower.id = 'tower' + i;
+                towersContainer.appendChild(tower);
+            }
+
+            // Create disks
+            let tower1 = document.getElementById('tower1');
+            for (let i = numberOfDisks; i >= 1; i--) { // Reverse loop to start from the largest disk
+                let disk = document.createElement('div');
+                disk.className = 'disk';
+                disk.draggable = true;
+                disk.dataset.size = i;
+                disk.style.width = (20 + i * 20) + 'px'; // Adjust disk width based on size
+                disk.style.height = '20px'; // Fixed height
+                disk.style.bottom = (numberOfDisks - i) * 20 + 'px'; // Adjust disk bottom position based on size
+                disk.style.left = 'calc(50% - ' + ((20 + i * 20) / 2) + 'px)'; // Center horizontally
+                let span = document.createElement('span');
+                span.innerText = i;
+                disk.appendChild(span);
+                tower1.appendChild(disk);
+            }
+
+            // Make disks draggable
+            let disks = document.querySelectorAll('.disk');
+            disks.forEach(disk => {
+                disk.addEventListener('dragstart', drag);
+            });
+
+            // Allow dropping
+            let towers = document.querySelectorAll('.tower');
+            towers.forEach(tower => {
+                tower.addEventListener('dragover', allowDrop);
+                tower.addEventListener('drop', drop);
+            });
+        }
+
+        function allowDrop(ev) {
+            ev.preventDefault();
+        }
+
+        let draggedDisks = []; // Array to keep track of dragged disks
+
+function drag(ev) {
+    console.log("Drag Start:", ev.target.id); // Logging the ID of the dragged element
+    ev.dataTransfer.setData("text", ev.target.dataset.size); // Set custom data attribute with disk size
+}
+
+function drop(ev) {
+    ev.preventDefault();
+    let data = ev.dataTransfer.getData("text"); // Retrieve size of dragged disk
+    let targetTower = ev.target.closest('.tower');
+    let targetDisk = ev.target.closest('.disk');
+    let draggedDisk = document.querySelector('.disk[data-size="' + data + '"]:not(.dragged)');
+    console.log("Dropped Disk:", draggedDisk ? draggedDisk.id : "Dragged disk is null");
+    console.log("Target Tower:", targetTower ? targetTower.id : "Target tower is null");
+    console.log("Target Disk:", targetDisk ? targetDisk.id : "No disk");
+    
+    // Check if dragged disk exists
+    if (!draggedDisk) {
+        console.log("Error: Dragged disk is null.");
+        return;
+    }
+    
+    // Check if the target tower is valid
+    if (!targetTower) {
+        console.log("Error: Target tower is null.");
+        return;
+    }
+
+    // Check if there is a valid target disk
+    if (!targetDisk || targetDisk === draggedDisk.previousElementSibling) {
+        // Check if the dragged disk is the topmost disk on its tower
+        let towerOfDraggedDisk = draggedDisk.parentElement;
+        let topDiskOfTower = towerOfDraggedDisk.lastElementChild;
+        if (draggedDisk !== topDiskOfTower) {
+            console.log("Error: You can only move the topmost disk.");
+            return;
+        }
+
+        // Continue with drop logic
+        if (targetTower.children.length === 0) {
+            targetTower.appendChild(draggedDisk.cloneNode(true));
+        } else {
+            let disksInTargetTower = Array.from(targetTower.querySelectorAll('.disk'));
+            let targetDiskSize = Number(draggedDisk.dataset.size);
+            let smallestDiskInTargetTower = Math.min(...disksInTargetTower.map(disk => Number(disk.dataset.size)));
+            if (targetDiskSize < smallestDiskInTargetTower) {
+                targetTower.insertBefore(draggedDisk.cloneNode(true), disksInTargetTower[0]);
+            }
+        }
+        
+        // Add the dragged disk to the array of dragged disks
+        draggedDisks.push(draggedDisk);
+        
+        // Remove the original disk from its tower
+        draggedDisk.classList.add('dragged'); // Add a class to mark this disk as dragged
+        draggedDisk.style.display = 'none'; // Hide the original disk
+    }
+    checkWinCondition();
+}
+        function checkWinCondition() {
+            let tower3 = document.getElementById('tower3');
+            if (tower3.children.length === parseInt(document.getElementById('diskNumber').value)) {
+                alert("Félicitations ! Vous avez gagné !");
+            }
+        }
+    </script>
+</body>
+</html>
