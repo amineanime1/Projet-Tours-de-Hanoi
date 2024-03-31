@@ -24,7 +24,7 @@ struct Movement pop(struct Movement** stack, int* top) {
 }
 
 // Fonction pour résoudre les Tours de Hanoï de manière itérative
-void iterativeHanoi(int n, char source, char target, char auxiliary) {
+void iterativeHanoi(int n, char source, char target, char auxiliary, int* moveCount) {
     // Initialiser une pile pour stocker les mouvements à effectuer
     struct Movement* stack = NULL;
     int top = -1;
@@ -44,6 +44,7 @@ void iterativeHanoi(int n, char source, char target, char auxiliary) {
 
             // Déplacer le disque restant de la source à la cible
             printf("D%cplacer le disque %d de %c vers %c\n",130, current.n, current.source, current.target);
+            (*moveCount)++; // Incrémenter le nombre de déplacements
 
             // Empiler les mouvements nécessaires pour déplacer n-1 disques de l'auxiliaire à la cible
             struct Movement move2 = {current.n - 1, current.auxiliary, current.target, current.source};
@@ -56,18 +57,21 @@ void iterativeHanoi(int n, char source, char target, char auxiliary) {
 
 int main() {
     int n;
-    printf("It%cratif // Entrez le nombre de disques : ",130);
+    printf("Entrez le nombre de disques : ");
     scanf("%d", &n);
+    
+    int moveCount = 0; // Initialiser le compteur de déplacements
     
     clock_t start_time = clock();
     
     // Appel de la fonction iterativeHanoi pour résoudre le problème
-    iterativeHanoi(n, 'A', 'C', 'B');
+    iterativeHanoi(n, 'A', 'C', 'B', &moveCount);
     
     clock_t end_time = clock();
     double execution_time = (double)(end_time - start_time) / CLOCKS_PER_SEC;
     
     printf("Temps d'ex%ccution : %f secondes\n",130, execution_time);
+    printf("Nombre total de d%cplacements : %d\n", 130, moveCount);
     
     return 0;
 }
