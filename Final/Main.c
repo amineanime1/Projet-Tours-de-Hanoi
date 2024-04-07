@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
+#include <stdbool.h> // Pour utiliser le type bool en C
 
 #define MAX_LOGS 10 // Nombre maximal de logs à conserver
 
@@ -37,6 +38,22 @@ struct Movement pop(struct Movement **stack, int *top)
     return movement;
 }
 
+// Fonction pour vérifier si l'état final est correct
+bool check_final_state(struct Movement *stack, int top) {
+    if (top == -1) {
+        return true;
+    }
+
+    int prev_disk = stack[top].n;
+    for (int i = top - 1; i >= 0; i--) {
+        if (stack[i].n >= prev_disk) {
+            return false;
+        }
+        prev_disk = stack[i].n;
+    }
+
+    return true;
+}
 // Fonction pour résoudre les Tours de Hanoï de manière récursive et enregistrer les logs
 int hanoi_recursif(int n, char source, char target, char auxiliary, struct Log logs[], int *log_count)
 {
@@ -58,7 +75,7 @@ int hanoi_recursif(int n, char source, char target, char auxiliary, struct Log l
         if (current.n == 1)
         {
             // Si le nombre de disques est 1, effectuer le déplacement directement
-            printf("D%cplacer le disque 1 de %c vers %c\n", 130, current.source, current.target);
+            printf("D%cplacer le disque 1 de %c vers %c\n", 130,current.source, current.target);
             moves++; // Ajouter un déplacement
         }
         else
@@ -106,6 +123,8 @@ int hanoi_recursif(int n, char source, char target, char auxiliary, struct Log l
 
     return moves;
 }
+
+// Fonction pour résoudre les Tours de Hanoï de manière itérative et enregistrer les logs
 int hanoi_iteratif(int n, char source, char target, char auxiliary)
 {
     // Initialize a counter for moves
@@ -180,14 +199,13 @@ void add_log(struct Log logs[], char algo[], int n, double execution_time, int m
 // Fonction pour afficher les logs
 void display_logs(struct Log logs[], int log_count)
 {
-    printf("Logs des dernières utilisations :\n");
+    printf("Logs des derni%cres utilisations :\n", 138);
     for (int i = 0; i < log_count; i++)
     {
         printf("%d - %s | %d disques | Temps d'ex%ccution : %f secondes | Nombre total de d%cplacements : %d\n",
-               i + 1, logs[i].algo, logs[i].n,130, logs[i].execution_time,130,  logs[i].moves);
+               i + 1, logs[i].algo, logs[i].n,130, logs[i].execution_time,130, logs[i].moves);
     }
 }
-
 
 int main()
 {
@@ -195,12 +213,15 @@ int main()
     struct Log logs[MAX_LOGS] = {0};
     int log_count = 0;
 
+struct Movement *final_state_stack = NULL;
+    int final_state_top = -1;
+
     do
     {
-        printf("\nChoisissez l'algorithme pour r%csoudre les Tours de Hano%c :\n", 130, 139);
-        printf("1. R%ccursif\n", 130);
-        printf("2. It%cratif\n", 130);
-        printf("3. Logs des derni%cres utilisations\n", 138);
+        printf("\nChoisissez l'algorithme pour r%csoudre les Tours de Hano%c :\n",130,139);
+        printf("1. R%ccursif\n",130);
+        printf("2. It%cratif\n",130);
+        printf("3. Logs des derni%cres utilisations\n",138);
         printf("4. Quitter\n");
         scanf("%d", &choix_algo);
 
@@ -218,25 +239,32 @@ int main()
             int moves; // Définir moves ici
             if (choix_algo == 1)
             {
-                printf("Algorithme r%ccursif :\n", 130);
+                printf("Algorithme r%ccursif :\n",130);
                 int moves = hanoi_recursif(n, 'A', 'C', 'B', logs, &log_count);
-                printf("Nombre total de d%cplacements : %d\n", 130, moves);
+                printf("Nombre total de d%cplacements : %d\n",130, moves);
                 end_time = clock();
                 execution_time = (double)(end_time - start_time) / CLOCKS_PER_SEC;
-                add_log(logs, "R\x82"
-                              "cursif",
-                        n, execution_time, moves, &log_count);
+                add_log(logs, "R\x82" "cursif", n, execution_time, moves, &log_count);
             }
             else if (choix_algo == 2)
-        {
-                printf("Algorithme it%cratif :\n", 130);
+            {
+                printf("Algorithme it%cratif :\n",130);
                 int moves = hanoi_iteratif(n, 'A', 'C', 'B');
-                printf("Nombre total de d%cplacements : %d\n", 130, moves);
+                printf("Nombre total de d%cplacements : %d\n", 130,moves);
                 end_time = clock();
                 execution_time = (double)(end_time - start_time) / CLOCKS_PER_SEC;
-                add_log(logs, "It\x82ratif", n, execution_time, moves, &log_count);
+                add_log(logs, "It\x82" "ratif", n, execution_time, moves, &log_count);
             }
-            printf("Temps d'ex%ccution : %f secondes\n", 130, execution_time);
+            printf("Temps d'ex%ccution : %f secondes\n", 130,execution_time);
+
+            // Vérification de l'état final
+                printf("Vérification de l'%ctat final :\n",130);
+            bool final_state_correct = check_final_state(final_state_stack, final_state_top);
+            if (final_state_correct) {
+                printf("L'%ctat final est correct.\n",130);
+            } else {
+                printf("L'%ctat final est incorrect.\n",130);
+            }
         }
         else if (choix_algo == 3)
         {
