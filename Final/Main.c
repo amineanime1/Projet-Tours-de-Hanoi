@@ -183,7 +183,22 @@ void display_logs(struct Log logs[], int log_count)
         }
     }
 }
-
+void afficherEtatDesTours(Stack *source, Stack *auxiliary, Stack *target) {
+    printf("----------------------------------------------\n");
+    printf("Tour A : ");
+    for (int i = source->top; i >= 0; i--) {
+        printf("%d ", source->array[i]);
+    }
+    printf("\nTour B : ");
+    for (int i = auxiliary->top; i >= 0; i--) {
+        printf("%d ", auxiliary->array[i]);
+    }
+    printf("\nTour C : ");
+    for (int i = target->top; i >= 0; i--) {
+        printf("%d ", target->array[i]);
+    }
+    printf("\n----------------------------------------------\n");
+}
 int main()
 {
     int choix_algo;
@@ -221,9 +236,13 @@ if (choix_algo == 1)
     {
         push(source, i);
     }
+     printf("%ctat initial des tours :\n",130);
+    afficherEtatDesTours(source, auxiliary, target);
     moves = tohRecursif(n, source, auxiliary, target); 
     end_time = clock();
     execution_time = (double)(end_time - start_time) / CLOCKS_PER_SEC;
+    printf("%ctat final des tours :\n",130);
+    afficherEtatDesTours(source, auxiliary, target);
   printf("Nombre de d%cplacements : %d coups\n",130, moves);
     printf("Temps d'ex%ccution : %f secondes\n", 130,execution_time);
  bool verificationResult = verification(n, source, auxiliary, target);
@@ -240,9 +259,13 @@ if (choix_algo == 2)
     {
         push(source, i);
     }
+    printf("%ctat initial des tours :\n",130);
+    afficherEtatDesTours(source, auxiliary, target);
     moves = tohIteratif(n, source, target, auxiliary); // Passer l'adresse de la variable moves
     end_time = clock();
     execution_time = (double)(end_time - start_time) / CLOCKS_PER_SEC;
+    printf("%ctat final des tours :\n",130);
+    afficherEtatDesTours(source, auxiliary, target);
     printf("Nombre de d%cplacements : %d coups\n",130, moves);
     printf("Temps d'ex%ccution : %f secondes\n", 130,execution_time);
  bool verificationResult = verification(n, source, auxiliary, target);
