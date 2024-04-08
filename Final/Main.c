@@ -1,173 +1,141 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
-#include <stdbool.h> // Pour utiliser le type bool en C
+#include <math.h>
+#include <stdbool.h>
 
+#define MAX_DISKS 100
 #define MAX_LOGS 10 // Nombre maximal de logs à conserver
 
-// Structure pour représenter un mouvement dans les Tours de Hanoï
-struct Movement
-{
-    int n;                          // Nombre de disques à déplacer
-    char source, target, auxiliary; // Les trois tours impliquées dans le mouvement
-};
-
-// Structure pour représenter un log
 struct Log
 {
     char algo[20];         // Nom de l'algorithme
     int n;                 // Nombre de disques
     double execution_time; // Temps d'exécution
     int moves;             // Nombre total de déplacements
+    bool verification_success; // Flag to indicate if the verification was successful
 };
-
-// Fonction pour empiler un mouvement dans la pile
-void push(struct Movement **stack, int *top, struct Movement movement)
+typedef struct Stack
 {
-    (*top)++;
-    *stack = realloc(*stack, (*top + 1) * sizeof(struct Movement));
-    (*stack)[*top] = movement;
+    int top;
+    unsigned capacity;
+    int *array;
+    char name;
+} Stack;
+
+Stack *createStack(unsigned capacity, char name)
+{
+    Stack *stack = (Stack *)malloc(sizeof(Stack));
+    stack->capacity = capacity;
+    stack->top = -1;
+    stack->array = (int *)malloc(stack->capacity * sizeof(int));
+    stack->name = name;
+    return stack;
 }
 
-// Fonction pour dépiler un mouvement de la pile
-struct Movement pop(struct Movement **stack, int *top)
+void push(Stack *stack, int item)
 {
-    struct Movement movement = (*stack)[*top];
-    (*top)--;
-    *stack = realloc(*stack, (*top + 1) * sizeof(struct Movement));
-    return movement;
+    stack->array[++stack->top] = item;
 }
 
-// Fonction pour vérifier si l'état final est correct
-bool check_final_state(struct Movement *stack, int top) {
-    if (top == -1) {
-        return true;
+int pop(Stack *stack)
+{
+    if (stack->top == -1)
+        return -1;
+    return stack->array[stack->top--];
+}
+int top(Stack* stack) {
+    if (stack->top == -1) return -1;
+    return stack->array[stack->top];
+}
+
+int isEmpty(Stack *stack) {
+    return stack->top == -1;
+}
+
+// Function to check if all disks are in the target stack
+int isComplete(Stack *target, int n) {
+    if (target->top != n - 1) {
+        return 0;
     }
 
-    int prev_disk = stack[top].n;
-    for (int i = top - 1; i >= 0; i--) {
-        if (stack[i].n >= prev_disk) {
-            return false;
+    for (int i = 0; i < n; i++) {
+        if (target->array[i] != n - i) {
+            return 0;
         }
-        prev_disk = stack[i].n;
     }
 
+    return 1;
+}
+
+bool verification (int n, Stack *source, Stack *auxiliary, Stack *target) {
+        if (isEmpty(source) && isEmpty(auxiliary) && isComplete(target, n)) {
+            printf("Les disques ont %ct%c d%cplac%cs avec succ%cs vers la tour C.\n",130,130,130,130,138);
     return true;
+} else {
+    printf("Les disques n'ont pas %ct%c d%cplac%cs avec succ%cs.\n",130,130,130,130,138);
+   return false;
 }
-// Fonction pour résoudre les Tours de Hanoï de manière récursive et enregistrer les logs
-int hanoi_recursif(int n, char source, char target, char auxiliary, struct Log logs[], int *log_count)
+}
+void moveDiskRecursif(Stack *source, Stack *target)
 {
-    // Initialiser une pile pour stocker les mouvements à effectuer
-    struct Movement *stack = NULL;
-    int top = -1;
-
-    // Empiler le premier mouvement
-    struct Movement initial = {n, source, target, auxiliary};
-    push(&stack, &top, initial);
-
-    int moves = 0;
-
-    while (top >= 0)
-    {
-        // Dépiler le mouvement en cours
-        struct Movement current = pop(&stack, &top);
-
-        if (current.n == 1)
-        {
-            // Si le nombre de disques est 1, effectuer le déplacement directement
-            printf("D%cplacer le disque 1 de %c vers %c\n", 130,current.source, current.target);
-            moves++; // Ajouter un déplacement
-        }
-        else
-        {
-            // Empiler les mouvements nécessaires pour déplacer n-1 disques de la source à l'auxiliaire
-            struct Movement move1 = {current.n - 1, current.source, current.auxiliary, current.target};
-            push(&stack, &top, move1);
-
-            // Déplacer le disque restant de la source à la cible
-            printf("D%cplacer le disque %d de %c vers %c\n",130, current.n, current.source, current.target);
-            moves++; // Ajouter un déplacement
-
-            // Empiler les mouvements nécessaires pour déplacer n-1 disques de l'auxiliaire à la cible
-            struct Movement move2 = {current.n - 1, current.auxiliary, current.target, current.source};
-            push(&stack, &top, move2);
-        }
-    }
-
-    free(stack); // Libérer la mémoire de la pile
-
-    // Enregistrer le log
-    if (*log_count < MAX_LOGS)
-    {
-        struct Log new_log = {0};
-        sprintf(new_log.algo, "R%ccursif", 130);
-        new_log.n = n;
-        new_log.moves = moves;
-        logs[*log_count] = new_log;
-        (*log_count)++;
-    }
-    else
-    {
-        // Si le nombre maximal de logs est atteint, supprimer le premier et décaler les autres
-        for (int i = 0; i < MAX_LOGS - 1; i++)
-        {
-            logs[i] = logs[i + 1];
-        }
-        // Ajouter le nouveau log à la fin
-        struct Log new_log = {0};
-        sprintf(new_log.algo, "R%ccursif", 130);
-        new_log.n = n;
-        new_log.moves = moves;
-        logs[MAX_LOGS - 1] = new_log;
-    }
-
-    return moves;
+    int disk = pop(source);
+    push(target, disk);
+    printf("D%cplacement du disque %d de %c vers %c\n",130, disk, source->name,target->name);
 }
 
-// Fonction pour résoudre les Tours de Hanoï de manière itérative et enregistrer les logs
-int hanoi_iteratif(int n, char source, char target, char auxiliary)
+int tohRecursif(int n, Stack *source, Stack *auxiliary, Stack *target) {
+    int moveCount = 0;
+
+    if (n > 0) {
+        moveCount += tohRecursif(n - 1, source, target, auxiliary);
+        moveDiskRecursif(source, target);
+        moveCount++;
+        moveCount += tohRecursif(n - 1, auxiliary, source, target);
+    }
+
+    return moveCount;
+}
+void moveDiskIteratif(Stack *source, Stack *target) {
+    int diskFromSource = top(source);
+    int diskFromTarget = top(target);
+
+    if (diskFromSource != -1 && (diskFromTarget == -1 || diskFromSource < diskFromTarget)) {
+        diskFromSource = pop(source);
+        push(target, diskFromSource);
+        printf("D%cplacement du disque %d de %c vers %c\n",130, diskFromSource, source->name, target->name);
+    } else if (diskFromTarget != -1 && (diskFromSource == -1 || diskFromTarget < diskFromSource)) {
+        diskFromTarget = pop(target);
+        push(source, diskFromTarget);
+        printf("D%cplacement du disque %d de %c vers %c\n",130, diskFromTarget, target->name, source->name);
+    }
+}
+int tohIteratif(int n, Stack *source, Stack *target, Stack *auxiliary)
 {
-    // Initialize a counter for moves
-    int moves = 0;
+    int total_moves = (1 << n) - 1; 
+    int moveCount = 0;
 
-    // Initialiser une pile pour stocker les mouvements à effectuer
-    struct Movement *stack = NULL;
-    int top = -1;
-
-    // Empiler le premier mouvement
-    struct Movement initial = {n, source, target, auxiliary};
-    push(&stack, &top, initial);
-
-    while (top >= 0)
-    {
-        // Dépiler le mouvement en cours
-        struct Movement current = pop(&stack, &top);
-
-        if (current.n > 0)
-        {
-            // Empiler les mouvements nécessaires pour déplacer n-1 disques de la source à l'auxiliaire
-            struct Movement move1 = {current.n - 1, current.source, current.auxiliary, current.target};
-            push(&stack, &top, move1);
-
-            // Déplacer le disque restant de la source à la cible
-            printf("D%cplacer le disque %d de %c vers %c\n", 130, current.n, current.source, current.target);
-
-            // Empiler les mouvements nécessaires pour déplacer n-1 disques de l'auxiliaire à la cible
-            struct Movement move2 = {current.n - 1, current.auxiliary, current.target, current.source};
-            push(&stack, &top, move2);
-
-            moves++; // Ajouter un déplacement
-        }
+    if (n % 2 == 0) {
+        Stack *temp = target;
+        target = auxiliary;
+        auxiliary = temp;
     }
 
-    free(stack); // Libérer la mémoire de la pile
+    while (moveCount < total_moves) {
+        if (moveCount % 3 == 0) {
+            moveDiskIteratif(source, target);
+        } else if (moveCount % 3 == 1) {
+            moveDiskIteratif(source, auxiliary);
+        } else {
+            moveDiskIteratif(auxiliary, target);
+        }
+        moveCount++;
+    }
 
-    // Return the number of moves
-    return moves;
+    return moveCount;
 }
-
 // Fonction pour enregistrer un log
-void add_log(struct Log logs[], char algo[], int n, double execution_time, int moves, int *log_count)
+void add_log(struct Log logs[], char algo[], int n, double execution_time, int moves, int *log_count, bool verification_success)
 {
     if (*log_count < MAX_LOGS)
     {
@@ -176,6 +144,7 @@ void add_log(struct Log logs[], char algo[], int n, double execution_time, int m
         new_log.n = n;
         new_log.execution_time = execution_time;
         new_log.moves = moves; // Mettre à jour le nombre total de déplacements
+        new_log.verification_success = verification_success; // Add verification success flag
         logs[*log_count] = new_log;
         (*log_count)++;
     }
@@ -192,6 +161,7 @@ void add_log(struct Log logs[], char algo[], int n, double execution_time, int m
         new_log.n = n;
         new_log.execution_time = execution_time;
         new_log.moves = moves; // Mettre à jour le nombre total de déplacements
+        new_log.verification_success = verification_success; // Add verification success flag
         logs[MAX_LOGS - 1] = new_log;
     }
 }
@@ -202,23 +172,27 @@ void display_logs(struct Log logs[], int log_count)
     printf("Logs des derni%cres utilisations :\n", 138);
     for (int i = 0; i < log_count; i++)
     {
-        printf("%d - %s | %d disques | Temps d'ex%ccution : %f secondes | Nombre total de d%cplacements : %d\n",
-               i + 1, logs[i].algo, logs[i].n,130, logs[i].execution_time,130, logs[i].moves);
+        printf("%d - %s | %d disques | Temps d'ex%ccution : %f secondes | Nombre total de d%cplacements : %d | ",
+               i + 1, logs[i].algo, logs[i].n, 130, logs[i].execution_time, 130, logs[i].moves);
+
+        // Check if verification was successful and print accordingly
+        if (logs[i].verification_success) {
+            printf("Correct solution\n");
+        } else {
+            printf("Incorrect solution\n");
+        }
     }
 }
 
 int main()
 {
     int choix_algo;
-    struct Log logs[MAX_LOGS] = {0};
+     struct Log logs[MAX_LOGS] = {0};
     int log_count = 0;
-
-struct Movement *final_state_stack = NULL;
-    int final_state_top = -1;
 
     do
     {
-        printf("\nChoisissez l'algorithme pour r%csoudre les Tours de Hano%c :\n",130,139);
+        printf("\nChoisissez l'algorithme pour r%csoudre les Tours d'Hano%c :\n",130,139);
         printf("1. R%ccursif\n",130);
         printf("2. It%cratif\n",130);
         printf("3. Logs des derni%cres utilisations\n",138);
@@ -233,46 +207,55 @@ struct Movement *final_state_stack = NULL;
 
             clock_t start_time, end_time;
             double execution_time;
-
+            int moves = 0;
             start_time = clock();
 
-            int moves; // Définir moves ici
-            if (choix_algo == 1)
-            {
-                printf("Algorithme r%ccursif :\n",130);
-                int moves = hanoi_recursif(n, 'A', 'C', 'B', logs, &log_count);
-                printf("Nombre total de d%cplacements : %d\n",130, moves);
-                end_time = clock();
-                execution_time = (double)(end_time - start_time) / CLOCKS_PER_SEC;
-                add_log(logs, "R\x82" "cursif", n, execution_time, moves, &log_count);
-            }
-            else if (choix_algo == 2)
-            {
-                printf("Algorithme it%cratif :\n",130);
-                int moves = hanoi_iteratif(n, 'A', 'C', 'B');
-                printf("Nombre total de d%cplacements : %d\n", 130,moves);
-                end_time = clock();
-                execution_time = (double)(end_time - start_time) / CLOCKS_PER_SEC;
-                add_log(logs, "It\x82" "ratif", n, execution_time, moves, &log_count);
-            }
-            printf("Temps d'ex%ccution : %f secondes\n", 130,execution_time);
+if (choix_algo == 1)
+{
+    printf("Algorithme r%ccursif :\n",130);
+    Stack *source = createStack(n, 'A');
+    Stack *auxiliary = createStack(n, 'B');
+    Stack *target = createStack(n, 'C');
 
-            // Vérification de l'état final
-                printf("V%crification de l'%ctat final :\n",130,130);
-            bool final_state_correct = check_final_state(final_state_stack, final_state_top);
-            if (final_state_correct) {
-                printf("L'%ctat final est correct.\n",130);
-            } else {
-                printf("L'%ctat final est incorrect.\n",130);
-            }
+    for (int i = n; i > 0; i--)
+    {
+        push(source, i);
+    }
+    moves = tohRecursif(n, source, auxiliary, target); 
+    end_time = clock();
+    execution_time = (double)(end_time - start_time) / CLOCKS_PER_SEC;
+  printf("Nombre de d%cplacements : %d coups\n",130, moves);
+    printf("Temps d'ex%ccution : %f secondes\n", 130,execution_time);
+ bool verificationResult = verification(n, source, auxiliary, target);
+    add_log(logs, "R\x82" "cursif", n, execution_time, moves, &log_count, verificationResult); // Add the verification result to the logs
+}
+if (choix_algo == 2)
+{
+    printf("Algorithme it%cratif :\n",130);
+    Stack *source = createStack(n, 'A');
+    Stack *auxiliary = createStack(n, 'B');
+    Stack *target = createStack(n, 'C');
+
+    for (int i = n; i > 0; i--)
+    {
+        push(source, i);
+    }
+    moves = tohIteratif(n, source, target, auxiliary); // Passer l'adresse de la variable moves
+    end_time = clock();
+    execution_time = (double)(end_time - start_time) / CLOCKS_PER_SEC;
+    printf("Nombre de d%cplacements : %d coups\n",130, moves);
+    printf("Temps d'ex%ccution : %f secondes\n", 130,execution_time);
+ bool verificationResult = verification(n, source, auxiliary, target);
+    add_log(logs, "It\x82ratif", n, execution_time, moves, &log_count, verificationResult); // Add the verification result to the logs
+}
         }
-        else if (choix_algo == 3)
+         else if (choix_algo == 3)
         {
             display_logs(logs, log_count);
         }
+
     } while (choix_algo != 4);
 
     printf("Fin du programme.\n");
-
     return 0;
 }
