@@ -2,76 +2,104 @@
 #include <stdlib.h>
 #include <time.h>
 
+typedef struct Stack
+{
+    int top;
+    unsigned capacity;
+    int *array;
+    char name;
+} Stack;
+
+Stack *createStack(unsigned capacity, char name)
+{
+    Stack *stack = (Stack *)malloc(sizeof(Stack));
+    stack->capacity = capacity;
+    stack->top = -1;
+    stack->array = (int *)malloc(stack->capacity * sizeof(int));
+    stack->name = name;
+    return stack;
+}
+
+void push(Stack *stack, int item)
+{
+    stack->array[++stack->top] = item;
+}
+
+int pop(Stack *stack)
+{
+    if (stack->top == -1)
+        return -1;
+    return stack->array[stack->top--];
+}
+int top(Stack* stack) {
+    if (stack->top == -1) return -1;
+    return stack->array[stack->top];
+}
 // Structure pour représenter un mouvement dans les Tours de Hanoï
-struct Movement {
-    int n; // Nombre de disques à déplacer
-    char source, target, auxiliary; // Les trois tours impliquées dans le mouvement
-};
+void moveDiskIteratif(Stack *source, Stack *target) {
+    int diskFromSource = top(source);
+    int diskFromTarget = top(target);
 
-// Fonction pour empiler un mouvement dans la pile
-void push(struct Movement** stack, int* top, struct Movement movement) {
-    (*top)++;
-    *stack = realloc(*stack, (*top + 1) * sizeof(struct Movement));
-    (*stack)[*top] = movement;
+    if (diskFromSource != -1 && (diskFromTarget == -1 || diskFromSource < diskFromTarget)) {
+        diskFromSource = pop(source);
+        push(target, diskFromSource);
+        printf("D%cplacement du disque %d de %c vers %c\n",130, diskFromSource, source->name, target->name);
+    } else if (diskFromTarget != -1 && (diskFromSource == -1 || diskFromTarget < diskFromSource)) {
+        diskFromTarget = pop(target);
+        push(source, diskFromTarget);
+        printf("D%cplacement du disque %d de %c vers %c\n",130, diskFromTarget, target->name, source->name);
+    }
 }
+int tohIteratif(int n, Stack *source, Stack *target, Stack *auxiliary)
+{
+    int total_moves = (1 << n) - 1; 
+    int moveCount = 0;
 
-// Fonction pour dépiler un mouvement de la pile
-struct Movement pop(struct Movement** stack, int* top) {
-    struct Movement movement = (*stack)[*top];
-    (*top)--;
-    *stack = realloc(*stack, (*top + 1) * sizeof(struct Movement));
-    return movement;
-}
-
-// Fonction pour résoudre les Tours de Hanoï de manière itérative
-void iterativeHanoi(int n, char source, char target, char auxiliary, int* moveCount) {
-    // Initialiser une pile pour stocker les mouvements à effectuer
-    struct Movement* stack = NULL;
-    int top = -1;
-
-    // Empiler le premier mouvement
-    struct Movement initial = {n, source, target, auxiliary};
-    push(&stack, &top, initial);
-
-    while (top >= 0) {
-        // Dépiler le mouvement en cours
-        struct Movement current = pop(&stack, &top);
-
-        if (current.n > 0) {
-            // Empiler les mouvements nécessaires pour déplacer n-1 disques de la source à l'auxiliaire
-            struct Movement move1 = {current.n - 1, current.source, current.auxiliary, current.target};
-            push(&stack, &top, move1);
-
-            // Déplacer le disque restant de la source à la cible
-            printf("D%cplacer le disque %d de %c vers %c\n",130, current.n, current.source, current.target);
-            (*moveCount)++; // Incrémenter le nombre de déplacements
-
-            // Empiler les mouvements nécessaires pour déplacer n-1 disques de l'auxiliaire à la cible
-            struct Movement move2 = {current.n - 1, current.auxiliary, current.target, current.source};
-            push(&stack, &top, move2);
-        }
+    if (n % 2 == 0) {
+        Stack *temp = target;
+        target = auxiliary;
+        auxiliary = temp;
     }
 
-    free(stack); // Libérer la mémoire de la pile
-}
+    while (moveCount < total_moves) {
+        if (moveCount % 3 == 0) {
+            moveDiskIteratif(source, target);
+        } else if (moveCount % 3 == 1) {
+            moveDiskIteratif(source, auxiliary);
+        } else {
+            moveDiskIteratif(auxiliary, target);
+        }
+        moveCount++;
+    }
 
-int main() {
-    int n;
-    printf("Entrez le nombre de disques : ");
+    return moveCount;
+}
+int main (){
+
+
+    int n ;
+    printf("Entrez le nombre de disques: ");
     scanf("%d", &n);
+    Stack *source = createStack(n, 'A');
+    Stack *auxiliary = createStack(n, 'B');
+    Stack *target = createStack(n, 'C');
+
+     clock_t start_time, end_time;
+            start_time = clock();
+    for (int i = n; i > 0; i--) {
+        push(source, i);
+    }
+ 
+    printf("Solution It%crative: \n",130);
+    // Appel de la fonction tohIteratif pour résoudre le problème
+ int moveCount = tohIteratif(n, source, target, auxiliary);
     
-    int moveCount = 0; // Initialiser le compteur de déplacements
-    
-    clock_t start_time = clock();
-    
-    // Appel de la fonction iterativeHanoi pour résoudre le problème
-    iterativeHanoi(n, 'A', 'C', 'B', &moveCount);
-    
-    clock_t end_time = clock();
+        end_time = clock();
     double execution_time = (double)(end_time - start_time) / CLOCKS_PER_SEC;
     
     printf("Temps d'ex%ccution : %f secondes\n",130, execution_time);
-    printf("Nombre total de d%cplacements : %d\n", 130, moveCount);
-    
+   
+    printf("Nombre de d%ccalages: %d\n",130, moveCount);
+
     return 0;
 }
