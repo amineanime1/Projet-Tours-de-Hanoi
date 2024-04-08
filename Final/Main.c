@@ -258,7 +258,7 @@ struct Movement *final_state_stack = NULL;
             printf("Temps d'ex%ccution : %f secondes\n", 130,execution_time);
 
             // Vérification de l'état final
-                printf("Vérification de l'%ctat final :\n",130);
+                printf("V%crification de l'%ctat final :\n",130,130);
             bool final_state_correct = check_final_state(final_state_stack, final_state_top);
             if (final_state_correct) {
                 printf("L'%ctat final est correct.\n",130);
