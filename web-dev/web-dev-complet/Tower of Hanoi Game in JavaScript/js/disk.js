@@ -6,7 +6,7 @@ function Disk(tower, width, colour) {
 }
 
 // Specified as class property so that TowerManager can calculate how high to make towers, based on number of disks.
-Disk.height = 15;
+Disk.height = 20;
 
 Disk.prototype.move_to = function(point) {
   this.position = point;
@@ -29,15 +29,36 @@ Disk.prototype.transfer_to_tower = function(destination) {
 }
 
 Disk.prototype.draw = function() {
+  // Sauvegarde du contexte de dessin
+  this.tower.ctx.save();
+
+  // Dessin du disque
   this.tower.ctx.beginPath();
-  this.tower.ctx.rect(this.position.x, this.position.y, this.width, this.height);
+  var radius = this.height / 4; // Calcul du rayon du bord arrondi
+  var x = this.position.x;
+  var y = this.position.y;
+
+  // Début du chemin
+  this.tower.ctx.moveTo(x + radius, y);
+  // Arc du coin supérieur droit
+  this.tower.ctx.arcTo(x + this.width, y, x + this.width, y + this.height, radius);
+  // Arc du coin inférieur droit
+  this.tower.ctx.arcTo(x + this.width, y + this.height, x, y + this.height, radius);
+  // Arc du coin inférieur gauche
+  this.tower.ctx.arcTo(x, y + this.height, x, y, radius);
+  // Arc du coin supérieur gauche
+  this.tower.ctx.arcTo(x, y, x + this.width, y, radius);
+  // Fin du chemin
   this.tower.ctx.closePath();
 
-  this.tower.ctx.save();
+  // Remplissage du disque avec la couleur spécifiée
   this.tower.ctx.fillStyle = this.colour;
   this.tower.ctx.fill();
+
+  // Restauration du contexte de dessin
   this.tower.ctx.restore();
 }
+
 
 Disk.prototype.is_clicked_on = function(point) {
   return point.x >= this.position.x              &&

@@ -12,3 +12,11 @@ VictoryCelebrator.prototype.on_victory = function() {
       new Game(document.getElementById('disks-count').value);
   }, false);
 }
+
+
+const restart = document.getElementById("restart-game");
+
+restart.addEventListener("click" , () =>{
+  var disksCountInput = document.getElementById('disks-count-input').value;
+  new Game(disksCountInput);
+})

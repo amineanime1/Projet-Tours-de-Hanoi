@@ -11,33 +11,71 @@
     <script type="text/javascript" src="js/element_coordinate_finder.js"></script>
     <script type="text/javascript" src="js/tower_manager.js"></script>
     <script type="text/javascript" src="js/game_state.js"></script>
-    <script type="text/javascript" src="js/victory_celebrator.js"></script>
+    <script type="text/javascript" defer src="js/victory_celebrator.js"></script>
     <script type="text/javascript" src="js/tower.js"></script>
     <script type="text/javascript" src="js/disk.js"></script>
     <script type="text/javascript" src="js/canvas.js"></script>
     <script type="text/javascript" src="js/colour.js"></script>
-    <script type="text/javascript" src="js/init.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+
     <link rel="stylesheet" type="text/css" href="css/style.css" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+
   </head>
 
-  <body>
-    <canvas id="canvas" width="600" height="300"></canvas>
-    <div id="introduction">
-      <div id="introduction-message">
-        <h1>The Tower of Hanoi</h1>
-        <p>Your objective is to move your entire stack of disks from the first tower to one of the other two towers. There's only one
-          catch&mdash;you may not place a larger disk on top of a smaller one.</p>
-        <input id="start-new-game" type="button" value="Start game" />
+  <body class="bg-[#C3D7DA] flex flex-col  overflow-hidden   ">
+    <nav class=" p-4">
+      <div class="flex justify-between items-center">
+        <div class="block ">
+          <button id="hamburger-btn" class="text-white focus:outline-none">
+            <svg class="w-12 h-12 text-#460000" fill="none" stroke="#460000" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M4 6h16M4 12h16M4 18h16"></path>
+            </svg>          </button>
+        </div>        <!-- Hamburger Button -->
+        <div class="flex">
+          <input type="number" id="disks-count-input" class="rounded-lg bg-[#460000] text-white text-center pl-3 text-[20px]" min="1" max="10" value="3">
+
+          <button id="restart-game" class="restart-game-btn px-4 py-2 flex items-center space-x-2 text-[30px]">
+
+            <i class="fas fa-redo-alt text-[#460000]" ></i>
+          </button>
+        </div>
       </div>
-    </div>
-    <div id="victory-notification">
-      <div id="victory-message">
-        <h1>Victory!</h1>
-        <p>Congratulations! You just solve the mystery of the tower.</p>
-        <p><input id="play-again" type="button" value="Play again" /> with
-          <input id="disks-count" type="text" size="2" maxlength="2" value="3" /> disks.</p>
+      <!-- Hamburger Menu -->
+      <div id="hamburger-menu" class="hamburger-menu absolute  bg-[#460000] w-[400px] rounded-lg">
+        <ul class="mt-4 p-4 ">
+          <li class="text-center"><a href="#" class="block px-4 py-2  text-[#C3D7DA]  hover:bg-gray-700">Home</a></li>
+          <li class="text-center"><a href="#" class="block px-4 py-2  text-[#C3D7DA] hover:bg-gray-700">Les Personnes du projet</a></li>
+          <li class="text-center"> <a href="#" class="block px-4 py-2  text-[#C3D7DA] hover:bg-gray-700">Donne moi les truc a faire ici aussi</a></li>
+        </ul>
       </div>
+    </nav>
+        <div class="mt-[5%] w-screen">
+      <canvas id="canvas"  class="  mt-[10%]"></canvas>
     </div>
+   
+  
+     
+    <div id="victory-notification" class=" p-1 w-[200px]"  >
+     
+        
+          
+      <div class=" flex flex-col items-center justify-center my-2">
+        <p class="mb-[1rem]">Victory!</p>
+
+       
+         
+        <input class="rounded-lg text-center bg-[#460000]" id="disks-count" type="text" size="2" maxlength="2" value="3" /> 
+        <button id="play-again" class="restart-game-btn px-4 py-2 flex items-center space-x-2 text-[30px]">
+
+          <i class="fas fa-redo-alt " ></i>
+        </button>
+      </div>
+        
+       
+  </div>
     <div id="debug"></div>
   </body>
+  <script type="text/javascript"  src="js/init.js"></script>
+
 </html>
