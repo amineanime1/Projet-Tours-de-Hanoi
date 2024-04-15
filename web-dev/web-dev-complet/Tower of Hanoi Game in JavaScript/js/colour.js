@@ -34,12 +34,15 @@ Colour.random = function() {
 
 // Tableau des couleurs disponibles
 var colors = [
+  
   { r: 9, g: 0, b: 107 } ,
   { r: 37, g: 0, b: 51 },  
   { r: 97, g: 0, b: 77 },
   { r: 165, g: 0, b: 119 },
   { r: 255, g: 0, b: 0 }, // Disque 2 
-  { r: 255, g: 138, b: 0 }, 
+  { r: 255, g: 92, b: 0 }, 
+  {r:255 , g : 138 , b : 0},
   
 ];
+
 
