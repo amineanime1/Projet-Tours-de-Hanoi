@@ -3,8 +3,8 @@ function Tower(position, base_width, stem_height, ctx) {
   this.ctx = ctx;
   this.disks = [];
 
-  this.base = {'width': base_width, 'height': 20};
-  this.stem = {'width': 20, 'height': stem_height};
+  this.base = {'width': base_width, 'height': 400};
+  this.stem = {'width': 20, 'height': stem_height };
   this.height = this.base.height + this.stem.height;
   this.base.position = new Point(this.position.x, this.position.y + this.stem.height);
   this.stem.position = new Point(this.position.x + (this.base.width/2 - this.stem.width/2), this.position.y);
@@ -34,13 +34,42 @@ Tower.prototype.draw = function() {
 
 Tower.prototype.draw_self = function() {
   this.ctx.save();
+  this.ctx.fillStyle = '#460000';
   // Draw towers behind existing content, such as the disks of other towers.
   this.ctx.globalCompositeOperation = 'destination-over';
+  
+  // Dessiner la base avec des coins arrondis
+  var baseX = this.base.position.x - 300; // Position x de la base
+  var baseY = this.base.position.y; // Position y de la base
+  var baseWidth = this.base.width + 600; // Largeur de la base
+  var baseHeight = this.base.height; // Hauteur de la base
+  var cornerRadius = 20; // Rayon des coins arrondis
+  
   this.ctx.beginPath();
-  this.ctx.rect(this.base.position.x, this.base.position.y, this.base.width, this.base.height);
-  this.ctx.rect(this.stem.position.x, this.stem.position.y, this.stem.width, this.stem.height);
+  this.ctx.moveTo(baseX + cornerRadius, baseY);
+  this.ctx.arcTo(baseX + baseWidth, baseY, baseX + baseWidth, baseY + baseHeight, cornerRadius);
+  this.ctx.arcTo(baseX + baseWidth, baseY + baseHeight, baseX, baseY + baseHeight, cornerRadius);
+  this.ctx.arcTo(baseX, baseY + baseHeight, baseX, baseY, cornerRadius);
+  this.ctx.arcTo(baseX, baseY, baseX + baseWidth, baseY, cornerRadius);
   this.ctx.closePath();
   this.ctx.fill();
+  
+  // Dessiner la tige avec un haut arrondi
+  var stemX = this.stem.position.x; // Position x de la tige
+  var stemY = this.stem.position.y; // Position y de la tige
+  var stemWidth = this.stem.width; // Largeur de la tige
+  var stemHeight = this.stem.height +20; // Hauteur de la tige
+  var stemCornerRadius = 10; // Rayon du haut arrondi de la tige
+  
+  this.ctx.beginPath();
+  this.ctx.moveTo(stemX + stemCornerRadius, stemY);
+  this.ctx.arcTo(stemX + stemWidth, stemY, stemX + stemWidth, stemY + stemHeight, stemCornerRadius);
+  this.ctx.arcTo(stemX + stemWidth, stemY + stemHeight, stemX, stemY + stemHeight, stemCornerRadius);
+  this.ctx.arcTo(stemX, stemY + stemHeight , stemX, stemY, stemCornerRadius);
+  this.ctx.arcTo(stemX, stemY, stemX + stemWidth, stemY, stemCornerRadius);
+  this.ctx.closePath();
+  this.ctx.fill();
+  
   this.ctx.restore();
 }
 
