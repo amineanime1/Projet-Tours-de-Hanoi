@@ -14,6 +14,8 @@ struct Log
     double execution_time; // Temps d'exécution
     int moves;             // Nombre total de déplacements
     bool verification_success; // Flag to indicate if the verification was successful
+    int max_size; // Maximum size observed
+    double verification_time; // Time spent on verification
 };
 typedef struct Stack
 {
@@ -21,6 +23,8 @@ typedef struct Stack
     unsigned capacity;
     int *array;
     char name;
+    int current_size; // Current size of the stack
+    int max_size; // Maximum size observed
 } Stack;
 
 Stack *createStack(unsigned capacity, char name)
@@ -30,18 +34,24 @@ Stack *createStack(unsigned capacity, char name)
     stack->top = -1;
     stack->array = (int *)malloc(stack->capacity * sizeof(int));
     stack->name = name;
+    stack->current_size = 0; // Initialize current size to 0
+    stack->max_size = 0; // Initialize max size to 0
     return stack;
 }
 
 void push(Stack *stack, int item)
 {
     stack->array[++stack->top] = item;
+    stack->current_size++; // Increment current size
+    if (stack->current_size > stack->max_size) {
+        stack->max_size = stack->current_size; // Update max size if current size is greater
+    }
 }
-
 int pop(Stack *stack)
 {
     if (stack->top == -1)
         return -1;
+    stack->current_size--; // Decrement current size
     return stack->array[stack->top--];
 }
 int top(Stack* stack) {
@@ -135,7 +145,7 @@ int tohIteratif(int n, Stack *source, Stack *target, Stack *auxiliary)
     return moveCount;
 }
 // Fonction pour enregistrer un log
-void add_log(struct Log logs[], char algo[], int n, double execution_time, int moves, int *log_count, bool verification_success)
+void add_log(struct Log logs[], char algo[], int n, double execution_time, int moves, int *log_count, bool verification_success, int max_size, double verification_time)
 {
     if (*log_count < MAX_LOGS)
     {
@@ -145,6 +155,8 @@ void add_log(struct Log logs[], char algo[], int n, double execution_time, int m
         new_log.execution_time = execution_time;
         new_log.moves = moves; // Mettre à jour le nombre total de déplacements
         new_log.verification_success = verification_success; // Add verification success flag
+        new_log.max_size = max_size; // Add max size to the log
+        new_log.verification_time = verification_time; // Add verification time to the log
         logs[*log_count] = new_log;
         (*log_count)++;
     }
@@ -172,8 +184,8 @@ void display_logs(struct Log logs[], int log_count)
     printf("Logs des derni%cres utilisations :\n", 138);
     for (int i = 0; i < log_count; i++)
     {
-        printf("%d - %s | %d disques | Temps d'ex%ccution : %f secondes | Nombre total de d%cplacements : %d | ",
-               i + 1, logs[i].algo, logs[i].n, 130, logs[i].execution_time, 130, logs[i].moves);
+        printf("%d - %s | %d disques | Temps d'ex%ccution : %f secondes | Nombre total de d%cplacements : %d | Espace m%cmoire occup%c : %d bytes | Temps de verification : %lf | ",
+               i + 1, logs[i].algo, logs[i].n, 130, logs[i].execution_time, 130, logs[i].moves, 130, 130 ,logs[i].max_size,logs[i].verification_time);
 
         // Check if verification was successful and print accordingly
         if (logs[i].verification_success) {
@@ -236,17 +248,32 @@ if (choix_algo == 1)
     {
         push(source, i);
     }
-     printf("%ctat initial des tours :\n",130);
+    printf("%ctat initial des tours :\n",130);
     afficherEtatDesTours(source, auxiliary, target);
     moves = tohRecursif(n, source, auxiliary, target); 
     end_time = clock();
     execution_time = (double)(end_time - start_time) / CLOCKS_PER_SEC;
     printf("%ctat final des tours :\n",130);
     afficherEtatDesTours(source, auxiliary, target);
-  printf("Nombre de d%cplacements : %d coups\n",130, moves);
+    printf("Nombre de d%cplacements : %d coups\n",130, moves);
     printf("Temps d'ex%ccution : %f secondes\n", 130,execution_time);
- bool verificationResult = verification(n, source, auxiliary, target);
-    add_log(logs, "R\x82" "cursif", n, execution_time, moves, &log_count, verificationResult); // Add the verification result to the logs
+    int total_elements = source->max_size + auxiliary->max_size + target->max_size;
+    int total_bytes = total_elements * sizeof(int);
+    printf("Espace m%cmoire occup%c : %d bytes\n", 130,130,total_bytes);
+    clock_t start_verification, end_verification;
+    double verification_time;
+
+    // Start the timer before the verification
+    start_verification = clock();
+    bool verificationResult = verification(n, source, auxiliary, target);
+    // Stop the timer after the verification
+    end_verification = clock();
+
+    // Calculate the time spent on the verification
+    verification_time = (double)(end_verification - start_verification) / CLOCKS_PER_SEC;
+
+    printf("Temps de v%crification : %f secondes\n", 130, verification_time);
+    add_log(logs, "R\x82" "cursif", n, execution_time, moves, &log_count, verificationResult, total_bytes, verification_time); // Add the verification result to the logs
 }
 if (choix_algo == 2)
 {
@@ -268,8 +295,23 @@ if (choix_algo == 2)
     afficherEtatDesTours(source, auxiliary, target);
     printf("Nombre de d%cplacements : %d coups\n",130, moves);
     printf("Temps d'ex%ccution : %f secondes\n", 130,execution_time);
- bool verificationResult = verification(n, source, auxiliary, target);
-    add_log(logs, "It\x82ratif", n, execution_time, moves, &log_count, verificationResult); // Add the verification result to the logs
+    int total_elements = source->max_size + auxiliary->max_size + target->max_size;
+    int total_bytes = total_elements * sizeof(int);
+    printf("Espace m%cmoire occup%c : %d bytes\n", 130,130,total_bytes);
+    clock_t start_verification, end_verification;
+    double verification_time;
+
+    // Start the timer before the verification
+    start_verification = clock();
+    bool verificationResult = verification(n, source, auxiliary, target);
+    // Stop the timer after the verification
+    end_verification = clock();
+
+    // Calculate the time spent on the verification
+    verification_time = (double)(end_verification - start_verification) / CLOCKS_PER_SEC;
+
+    printf("Temps de v%crification : %f secondes\n", 130, verification_time);
+    add_log(logs, "It\x82ratif", n, execution_time, moves, &log_count, verificationResult, total_bytes, verification_time); // Add the verification result to the logs
 }
         }
          else if (choix_algo == 3)
