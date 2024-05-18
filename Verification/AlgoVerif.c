@@ -63,7 +63,7 @@ int isComplete(Stack *target, int n) {
 void moveDisk(Stack *source, Stack *target) {
     int disk = pop(source);
     push(target, disk);
-    printf("Déplacer disque %d de tour %c à tour %c\n", disk, source->name, target->name);
+    printf("D%cplacer disque %d de tour %c vers tour %c\n",130, disk, source->name, target->name);
 }
 
 // Fonction récursive pour résoudre le jeu de Hanoï
@@ -81,16 +81,18 @@ void hanoi(int n, Stack *source, Stack *auxiliary, Stack *target) {
 // Vérification de la solution
 bool verification(int n, Stack *source, Stack *auxiliary, Stack *target) {
     if (isEmpty(source) && isEmpty(auxiliary) && isComplete(target, n)) {
-        printf("Les disques ont été déplacés avec succès vers la tour C.\n");
+        printf("Les disques ont %ct%c d%cplac%cs avec succ%cs vers la tour C.\n",130,130,130,130,138);
         return true;
     } else {
-        printf("Les disques n'ont pas été déplacés avec succès.\n");
+        printf("Les disques n'ont pas %ct%c d%cplac%cs avec succ%cs.\n",130,130,130,130,138);
         return false;
     }
 }
 
 int main() {
-    int n = 3; // Nombre de disques
+    int n; // Nombre de disques
+    printf("Entrez le nombre de disques: ");
+    scanf("%d", &n);
 
     // Création des trois tours
     Stack *source = createStack(n, 'A');
@@ -101,9 +103,30 @@ int main() {
     for (int i = n; i > 0; i--) {
         push(source, i);
     }
-
+ printf("Algorithme de v%crification: \n",130);
     // Affichage de l'état initial des tours
-    printf("État initial des tours :\n");
+     printf("----------------------------------------------\n");
+    printf("%ctat initial des tours :\n",130);
+    printf("Tour A : ",130);
+    for (int i = source->top; i >= 0; i--) {
+        printf("%d ", source->array[i]);
+    }
+    printf("\nTour B : ");
+    for (int i = auxiliary->top; i >= 0; i--) {
+        printf("%d ", auxiliary->array[i]);
+    }
+    printf("\nTour C : ");
+    for (int i = target->top; i >= 0; i--) {
+        printf("%d ", target->array[i]);
+    }
+    printf("\n");
+     printf("----------------------------------------------\n");
+
+    // Résolution du jeu de Hanoï
+    hanoi(n, source, auxiliary, target);
+
+ printf("----------------------------------------------\n");
+ printf("%ctat final des tours :\n",130);
     printf("Tour A : ");
     for (int i = source->top; i >= 0; i--) {
         printf("%d ", source->array[i]);
@@ -116,11 +139,8 @@ int main() {
     for (int i = target->top; i >= 0; i--) {
         printf("%d ", target->array[i]);
     }
-    printf("\n\n");
-
-    // Résolution du jeu de Hanoï
-    hanoi(n, source, auxiliary, target);
-
+    printf("\n");
+    printf("----------------------------------------------\n");
     // Vérification de la solution
     verification(n, source, auxiliary, target);
 

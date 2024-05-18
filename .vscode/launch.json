@@ -8,8 +8,8 @@
       "args": [],
       "stopAtEntry": false,
       "externalConsole": true,
-      "cwd": "c:/Users/Aures/OneDrive/Bureau/S4/ProjetPFEToursDHanoi/Iteratif",
-      "program": "c:/Users/Aures/OneDrive/Bureau/S4/ProjetPFEToursDHanoi/Iteratif/build/Debug/outDebug",
+      "cwd": "c:/Users/Aures/OneDrive/Bureau/S4/ProjetPFEToursDHanoi/Projet-Tours-d-Hano-",
+      "program": "c:/Users/Aures/OneDrive/Bureau/S4/ProjetPFEToursDHanoi/Projet-Tours-d-Hano-/build/Debug/outDebug",
       "MIMode": "gdb",
       "miDebuggerPath": "gdb",
       "setupCommands": [
