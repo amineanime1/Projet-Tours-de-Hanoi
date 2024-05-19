@@ -95,12 +95,12 @@ bool verification(int n, Stack *source, Stack *auxiliary, Stack *target) {
     // Vérifie si toutes les piles sont vides sauf la pile cible, et si les disques sont dans le bon ordre dans la pile cible
     if (isEmpty(source) && isEmpty(auxiliary) && isComplete(target, n)) {
         // Affiche un message indiquant que les disques ont été déplacés avec succès vers la tour C
-        printf("Les disques ont été déplacés avec succès vers la tour C.\n");
+        printf("Les disques ont %ct%c d%cplac%cs avec succ%cs vers la tour C.\n",130,130,130,130,138);
         // Retourne vrai pour indiquer que la vérification est réussie
         return true;
     } else {
         // Affiche un message indiquant que les disques n'ont pas été déplacés avec succès
-        printf("Les disques n'ont pas été déplacés avec succès.\n");
+        printf("Les disques n'ont pas %ct%c d%cplac%cs avec succ%cs.\n",130,130,130,130,138);
         // Retourne faux pour indiquer que la vérification a échoué
         return false;
     }
@@ -110,7 +110,7 @@ bool verification(int n, Stack *source, Stack *auxiliary, Stack *target) {
 void moveDiskRecursif(Stack *source, Stack *target) {
     int disk = pop(source); // Retire le disque du sommet de la source
     push(target, disk); // Ajoute le disque au sommet de la cible
-    printf("Déplacement du disque %d de %c vers %c\n", disk, source->name, target->name); // Affiche le déplacement
+    printf("D%cplacement du disque %d de %c vers %c\n",130, disk, source->name, target->name); // Affiche le déplacement
 }
 
 // Fonction récursive pour résoudre le problème des Tours de Hanoi
@@ -136,13 +136,13 @@ void moveDiskIteratif(Stack *source, Stack *target) {
     if (diskFromSource != -1 && (diskFromTarget == -1 || diskFromSource < diskFromTarget)) {
         diskFromSource = pop(source); // Retire le disque de la source
         push(target, diskFromSource); // Ajoute le disque à la cible
-        printf("Déplacement du disque %d de %c vers %c\n", diskFromSource, source->name, target->name); // Affiche le déplacement
+        printf("D%cplacement du disque %d de %c vers %c\n",130, diskFromSource, source->name, target->name); // Affiche le déplacement
     } 
     // Déplace le disque si la cible n'est pas vide et la source est vide ou si la cible est plus petite que la source
     else if (diskFromTarget != -1 && (diskFromSource == -1 || diskFromTarget < diskFromSource)) {
         diskFromTarget = pop(target); // Retire le disque de la cible
         push(source, diskFromTarget); // Ajoute le disque à la source
-        printf("Déplacement du disque %d de %c vers %c\n", diskFromTarget, target->name, source->name); // Affiche le déplacement
+        printf("D%cplacement du disque %d de %c vers %c\n",130, diskFromTarget, target->name, source->name); // Affiche le déplacement
     }
 }
 
@@ -204,12 +204,12 @@ void add_log(struct Log logs[], char algo[], int n, double execution_time, int m
 
 // Fonction pour afficher les journaux
 void display_logs(struct Log logs[], int log_count) {
-    printf("Logs des dernières utilisations :\n"); // Affiche l'en-tête des logs
+    printf("Logs des derni%cres utilisations :\n",138); // Affiche l'en-tête des logs
     for (int i = 0; i < log_count; i++) {
 
         // Affiche les détails de chaque entrée de journal
-        printf("%d - %s | %d disques | Temps d'exécution : %f secondes | Nombre total de déplacements : %d | Espace mémoire occupé : %d bytes | Temps de vérification : %lf | ",
-               i + 1, logs[i].algo, logs[i].n, logs[i].execution_time, logs[i].moves, logs[i].max_size, logs[i].verification_time);
+        printf("%d - %s | %d disques | Temps d'ex%ccution : %f secondes | Nombre total de d%cplacements : %d | Espace m%cmoire occup%c : %d bytes | Temps de v%crification : %lf | ",
+               i + 1, logs[i].algo, logs[i].n,130, logs[i].execution_time,130, logs[i].moves,130,130, logs[i].max_size,130, logs[i].verification_time);
 
         // Affiche si la vérification a réussi ou échoué
         if (logs[i].verification_success) {
@@ -237,17 +237,17 @@ void afficherEtatDesTours(Stack *source, Stack *auxiliary, Stack *target) {
     }
     printf("\n----------------------------------------------\n"); // Affiche une ligne de séparation
 }
-
+ // La fonction principale
 int main() {
     int choix_algo; // Variable pour stocker le choix de l'algorithme
     struct Log logs[MAX_LOGS] = {0}; // Tableau pour stocker les logs des exécutions
     int log_count = 0; // Variable pour suivre le nombre de logs enregistrés
 
     do {
-        printf("\nChoisissez l'algorithme pour résoudre les Tours de Hanoï :\n");
-        printf("1. Récursif\n");
-        printf("2. Itératif\n");
-        printf("3. Logs des dernières utilisations\n");
+        printf("\nChoisissez l'algorithme pour r%csoudre les Tours de Hano%c :\n",130,139);
+        printf("1. R%ccursif\n",130);
+        printf("2. It%cratif\n",130);
+        printf("3. Logs des derni%cres utilisations\n",138);
         printf("4. Quitter\n");
         scanf("%d", &choix_algo); // Demande à l'utilisateur de saisir son choix
 
@@ -265,7 +265,7 @@ int main() {
 
             // Exécution de l'algorithme choisi (récursif ou itératif)
             if (choix_algo == 1) { // Si l'utilisateur a choisi l'algorithme récursif
-                printf("Algorithme récursif :\n");
+                printf("Algorithme r%ccursif :\n",130);
                 Stack *source = createStack(n, 'A'); // Crée une pile pour la tour A
                 Stack *auxiliary = createStack(n, 'B'); // Crée une pile pour la tour B
                 Stack *target = createStack(n, 'C'); // Crée une pile pour la tour C
@@ -275,18 +275,18 @@ int main() {
                     push(source, i);
                 }
 
-                printf("État initial des tours :\n");
+                printf("%ctat initial des tours :\n",130);
                 afficherEtatDesTours(source, auxiliary, target); // Affiche l'état initial des tours
                 moves = tohRecursif(n, source, auxiliary, target); // Exécute l'algorithme récursif
                 end_time = clock(); // Arrête le chronomètre après l'exécution de l'algorithme
                 execution_time = (double)(end_time - start_time) / CLOCKS_PER_SEC; // Calcule le temps d'exécution
-                printf("État final des tours :\n");
+                printf("%ctat final des tours :\n",130);
                 afficherEtatDesTours(source, auxiliary, target); // Affiche l'état final des tours
-                printf("Nombre de déplacements : %d coups\n", moves); // Affiche le nombre de déplacements
-                printf("Temps d'exécution : %f secondes\n", execution_time); // Affiche le temps d'exécution
+                printf("Nombre de d%cplacements : %d coups\n", 130,moves); // Affiche le nombre de déplacements
+                printf("Temps d'ex%ccution : %f secondes\n", 130,execution_time); // Affiche le temps d'exécution
                 int total_elements = source->max_size + auxiliary->max_size + target->max_size;
                 int total_bytes = total_elements * sizeof(int);
-                printf("Espace mémoire occupé : %d bytes\n", total_bytes); // Affiche l'espace mémoire occupé
+                printf("Espace m%cmoire occup%c : %d bytes\n", 130,130,total_bytes); // Affiche l'espace mémoire occupé
 
                 // Vérification de la solution
                 clock_t start_verification, end_verification; // Variables pour mesurer le temps de vérification
@@ -295,14 +295,14 @@ int main() {
                 bool verificationResult = verification(n, source, auxiliary, target); // Vérifie la solution
                 end_verification = clock(); // Arrête le chronomètre après la vérification
                 verification_time = (double)(end_verification - start_verification) / CLOCKS_PER_SEC; // Calcule le temps de vérification
-                printf("Temps de vérification : %f secondes\n", verification_time); // Affiche le temps de vérification
+                printf("Temps de v%crification : %f secondes\n",130, verification_time); // Affiche le temps de vérification
 
                 // Ajoute les informations de l'exécution aux logs
-                add_log(logs, "Récursif", n, execution_time, moves, &log_count, verificationResult, total_bytes, verification_time);
+                add_log(logs, "Recursif", n, execution_time, moves, &log_count, verificationResult, total_bytes, verification_time);
             }
 
             if (choix_algo == 2) { // Si l'utilisateur a choisi l'algorithme itératif
-                printf("Algorithme itératif :\n");
+                printf("Algorithme it%cratif :\n",130);
                 Stack *source = createStack(n, 'A'); // Crée une pile pour la tour A
                 Stack *auxiliary = createStack(n, 'B'); // Crée une pile pour la tour B
                 Stack *target = createStack(n, 'C'); // Crée une pile pour la tour C
@@ -312,18 +312,18 @@ int main() {
                     push(source, i);
                 }
 
-                printf("État initial des tours :\n");
+                printf("%ctat initial des tours :\n",130);
                 afficherEtatDesTours(source, auxiliary, target); // Affiche l'état initial des tours
                 moves = tohIteratif(n, source, target, auxiliary); // Exécute l'algorithme itératif
                 end_time = clock(); // Arrête le chronomètre après l'exécution de l'algorithme
                 execution_time = (double)(end_time - start_time) / CLOCKS_PER_SEC; // Calcule le temps d'exécution
-                printf("État final des tours :\n");
+                printf("%ctat final des tours :\n",130);
                 afficherEtatDesTours(source, auxiliary, target); // Affiche l'état final des tours
-                printf("Nombre de déplacements : %d coups\n", moves); // Affiche le nombre de déplacements
-                printf("Temps d'exécution : %f secondes\n", execution_time); // Affiche le temps d'exécution
+                printf("Nombre de d%cplacements : %d coups\n", 130, moves); // Affiche le nombre de déplacements
+                printf("Temps d'ex%ccution : %f secondes\n",130, execution_time); // Affiche le temps d'exécution
                 int total_elements = source->max_size + auxiliary->max_size + target->max_size;
                 int total_bytes = total_elements * sizeof(int);
-                printf("Espace mémoire occupé : %d bytes\n", total_bytes); // Affiche l'espace mémoire occupé
+                printf("Espace m%cmoire occupé : %d bytes\n",130, total_bytes); // Affiche l'espace mémoire occupé
 
                 // Vérification de la solution
                 clock_t start_verification, end_verification; // Variables pour mesurer le temps de vérification
@@ -332,10 +332,10 @@ int main() {
                 bool verificationResult = verification(n, source, auxiliary, target); // Vérifie la solution
                 end_verification = clock(); // Arrête le chronomètre après la vérification
                 verification_time = (double)(end_verification - start_verification) / CLOCKS_PER_SEC; // Calcule le temps de vérification
-                printf("Temps de vérification : %f secondes\n", verification_time); // Affiche le temps de vérification
+                printf("Temps de v%crification : %f secondes\n",130, verification_time); // Affiche le temps de vérification
 
                 // Ajoute les informations de l'exécution aux logs
-                add_log(logs, "Itératif", n, execution_time, moves, &log_count, verificationResult, total_bytes, verification_time);
+                add_log(logs, "Iteratif", n, execution_time, moves, &log_count, verificationResult, total_bytes, verification_time);
             }
         } else if (choix_algo == 3) { // Si l'utilisateur a choisi d'afficher les logs
             display_logs(logs, log_count); // Affiche les logs des exécutions précédentes
