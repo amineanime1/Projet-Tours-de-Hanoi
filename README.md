@@ -11,7 +11,6 @@ Ce projet est réalisé dans le cadre du module "Projet Pluridisciplinaire" pré
 5. **Interface** : Interface graphique en Java pour la simulation des tours d'Hanoï.
 6. **web-dev** : Jeu des tours d'Hanoï en version web (HTML, CSS, JS).
 7. **.vscode** : Configuration de l'éditeur Visual Studio Code.
-8. **build** : Dossier de compilation pour les fichiers générés.
 
 ## Auteurs
 
