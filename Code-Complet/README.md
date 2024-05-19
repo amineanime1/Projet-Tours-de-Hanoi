@@ -11,3 +11,11 @@ Ce dossier contient une solution complète en C de la résolution des tours d'Ha
 Pour compiler le code source, utilisez la commande suivante :
 ```sh
 gcc -o Code-Complet Main.c
+```
+## Exécution
+
+Pour exécuter le programme compilé, utilisez la commande suivante :
+
+```sh
+./hanoi_recursive
+```
