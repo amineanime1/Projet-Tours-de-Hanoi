@@ -7,7 +7,7 @@ Ce projet est réalisé dans le cadre du module "Projet Pluridisciplinaire" pré
 1. **Recursif** : Implémentation récursive de l'algorithme des tours d'Hanoï en C.
 2. **Iteratif** : Implémentation itérative de l'algorithme des tours d'Hanoï en C.
 3. **Verification** : Algorithme de vérification en C pour valider la solution des tours d'Hanoï.
-4. **complete_solution** : Code complet en C incluant la résolution (récursive et itérative) et la vérification.
+4. **Code-Complet** : Code complet en C incluant la résolution (récursive et itérative) et la vérification.
 5. **Interface** : Interface graphique en Java pour la simulation des tours d'Hanoï.
 6. **web-dev** : Jeu des tours d'Hanoï en version web (HTML, CSS, JS).
 7. **.vscode** : Configuration de l'éditeur Visual Studio Code.
