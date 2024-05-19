@@ -11,3 +11,15 @@ Ce dossier contient un algorithme de vérification en C qui vérifie si les tour
 Pour compiler le code source, utilisez la commande suivante :
 ```sh
 gcc -o Verification AlgoVerif.c
+```
+## Exécution
+
+Pour exécuter le programme compilé, utilisez la commande suivante :
+
+```sh
+./Verification
+```
+
+## Auteur
+
+Ce code a été réalisé par IZEM Mohamed Amine.
