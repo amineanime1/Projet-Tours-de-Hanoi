@@ -17,5 +17,9 @@ gcc -o Code-Complet Main.c
 Pour exécuter le programme compilé, utilisez la commande suivante :
 
 ```sh
-./hanoi_recursive
+./Code-Complet
 ```
+
+## Auteur
+
+Ce code a été réalisé par IZEM Mohamed Amine.
