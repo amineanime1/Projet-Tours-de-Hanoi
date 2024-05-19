@@ -13,7 +13,7 @@ Ce projet est réalisé dans le cadre du module "Projet Pluridisciplinaire" pré
 7. **.vscode** : Configuration de l'éditeur Visual Studio Code.
 8. **build** : Dossier de compilation pour les fichiers générés.
 
-## Auteur
+## Auteurs
 
 Ce projet a été réalisé par IZEM Mohamed Amine, HAMAMTI Yacine, ARAMIS Younes, HADDAD Mohamed Zakaria, BELHOCINE Chakib, AZIEZ Hichem.
 
