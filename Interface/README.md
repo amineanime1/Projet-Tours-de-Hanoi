@@ -8,7 +8,7 @@ Ce dossier contient le code de l'interface graphique en Java pour la simulation 
 
 ## Exécution
 
-Pour exécuter le projet, lancez la classe principale `Main.java` dans votre IDE.
+Pour exécuter le projet, lancez la classe principale `Main.java`.
 
 ## Auteur
 
