@@ -1,4 +1,3 @@
-```markdown
 # Algorithme de Vérification des Tours d'Hanoï en C
 
 Ce dossier contient un algorithme de vérification en C qui vérifie si les tours source et auxiliaire sont vides et si la tour cible contient tous les disques dans le bon ordre.
