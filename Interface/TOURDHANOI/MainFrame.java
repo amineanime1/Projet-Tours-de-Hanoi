@@ -27,6 +27,7 @@ public class MainFrame extends JFrame {
     private static final int DELAY = 700; // Délai pour le timer en millisecondes
     private static int score = 0; // Score initial
 
+    
     // Variables d'instance
     private JPanel panel; // Panneau principal
     private JButton nextButton; // Bouton pour l'action "Next"
