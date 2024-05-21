@@ -1,9 +1,10 @@
+// Class Tour
 function Tower(position, base_width, stem_height, ctx) {
   this.position = position;
   this.ctx = ctx;
   this.disks = [];
 
-  this.base = {'width': base_width, 'height': 400};
+  this.base = {'width': base_width, 'height': 1000};
   this.stem = {'width': 20, 'height': stem_height };
   this.height = this.base.height + this.stem.height;
   this.base.position = new Point(this.position.x, this.position.y + this.stem.height);
@@ -16,17 +17,17 @@ function Tower(position, base_width, stem_height, ctx) {
 Tower.prototype.toString = function() {
   return 'Tower(x=' + this.position.x + ', y=' + this.position.y + ')';
 }
-
+// methode pour ajouter un disque dans la tour
 Tower.prototype.add_disk = function(disk) {
   this.disks.push(disk);
   this.disks_top -= disk.height;
 }
-
+// methode pour enlever le disque de la tour
 Tower.prototype.remove_disk = function(disk) {
   this.disks.splice(this.disks.indexOf(disk), 1);
   this.disks_top += disk.height;
 }
-
+// methode pour dessiner la tour
 Tower.prototype.draw = function() {
   this.draw_self();
   this.draw_disks();
@@ -35,7 +36,6 @@ Tower.prototype.draw = function() {
 Tower.prototype.draw_self = function() {
   this.ctx.save();
   this.ctx.fillStyle = '#460000';
-  // Draw towers behind existing content, such as the disks of other towers.
   this.ctx.globalCompositeOperation = 'destination-over';
   
   // Dessiner la base avec des coins arrondis

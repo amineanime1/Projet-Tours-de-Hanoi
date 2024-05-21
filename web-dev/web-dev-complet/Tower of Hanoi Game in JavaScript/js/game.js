@@ -1,7 +1,9 @@
 function Game(disks_count) {
   this.start_new(disks_count);
 }
+// Class Game 
 
+// method pour lancer une nouvelle game
 Game.prototype.start_new = function(disks_count) {
   debug.msg('New game');
 

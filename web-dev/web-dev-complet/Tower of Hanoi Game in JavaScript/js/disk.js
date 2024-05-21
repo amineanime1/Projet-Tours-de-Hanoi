@@ -27,6 +27,7 @@ Disk.prototype.transfer_to_tower = function(destination) {
 
   this.on_disk_transferred();
 }
+// classe des disques
 
 Disk.prototype.draw = function() {
   // Sauvegarde du contexte de dessin
@@ -75,6 +76,4 @@ Disk.prototype.toString = function() {
   return 'Disk(width=' + this.width + ', colour=' + this.colour + ')'
 }
 
-// Called when disk is transferred to any tower (including directly back to same tower). External agents
-// may override to implement custom behaviour.
 Disk.prototype.on_disk_transferred = function() { }

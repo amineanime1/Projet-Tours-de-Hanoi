@@ -1,7 +1,7 @@
 function ElementCoordinateFinder(element) {
   this.element = element;
 }
-
+// Class des coordonnée
 ElementCoordinateFinder.prototype.get_mouse_coordinates = function(event) {
   return new Point(event.pageX - this.get_offset_x(), event.pageY - this.get_offset_y());
 }

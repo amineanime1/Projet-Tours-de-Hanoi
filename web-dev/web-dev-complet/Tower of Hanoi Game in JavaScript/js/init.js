@@ -1,15 +1,12 @@
 function init() {
-  debug = new Debug(); // TODO: convert to singleton to eliminate global variable.
+  // initialiser le jeu avec 3 disque et lancer la game
+  debug = new Debug(); 
   new Game(3);
  
 }
 window.addEventListener('load', init, false);
 
 
-const button = document.getElementById('hamburger-btn');
 
-button.addEventListener('click', function() {
-  document.getElementById('hamburger-menu').classList.toggle('open');
-}); 
 
 

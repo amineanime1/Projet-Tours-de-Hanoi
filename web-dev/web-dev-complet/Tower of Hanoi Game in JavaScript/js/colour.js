@@ -1,7 +1,7 @@
 
 
 
-
+// Class Poiur la gestion des coulleurs
 
 // Propriété statique pour stocker les index des couleurs déjà utilisées
 Colour.usedColors = [];

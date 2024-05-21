@@ -4,6 +4,7 @@ function GameState(tower_manager) {
   this.last_complete_tower = this.find_complete_tower();
 }
 
+// method quand on change la position du disque
 GameState.prototype.on_disk_transferred = function() {
   var complete_tower = this.find_complete_tower();
   if(complete_tower && complete_tower != this.last_complete_tower) {
@@ -11,14 +12,14 @@ GameState.prototype.on_disk_transferred = function() {
     this.on_victory();
   }
 }
-
+// method pour trouver la tour complete
 GameState.prototype.find_complete_tower = function() {
   var towers = this.tower_manager.towers;
   for(var i in towers) {
     if(towers[i].disks.length == this.count_total_disks()) return towers[i];
   }
 }
-
+// calcul du total des disques
 GameState.prototype.count_total_disks = function() {
   return this.tower_manager.get_all_disks().length;
 }
@@ -27,11 +28,9 @@ GameState.prototype.connect_to_disks = function() {
   var disks = this.tower_manager.get_all_disks();
   var self = this;
   for(var i in disks) {
-    // Must use closure and 'self' -- only in so doing do we have access to GameState object.
-    // 'this' refers to the object that calls the method -- in this case, the Disk object.
-    disks[i].on_disk_transferred = function() { self.on_disk_transferred(); }
+       disks[i].on_disk_transferred = function() { self.on_disk_transferred(); }
   }
 }
 
-// Called when player is victorious. External agents may override this property to implement victory behaviour.
+// method pour la victoire
 GameState.prototype.on_victory = function() { }

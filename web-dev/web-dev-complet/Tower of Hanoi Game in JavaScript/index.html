@@ -3,7 +3,9 @@
   <head>
     <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
     <title>Tower of Hanoi</title>
-    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js"></script>
+
+<!-- Import des fichiers Javascript -->
+    <script src="https://cdn.jsdelivr.net/npm/js-confetti@latest/dist/js-confetti.browser.js"></script>
 
     <script type="text/javascript" src="js/miscellany.js"></script>
     <script type="text/javascript" src="js/game.js"></script>
@@ -28,32 +30,13 @@
   <body class="bg-[#C3D7DA] flex flex-col  overflow-hidden   ">
     <nav class=" p-4">
       <div class="flex justify-between items-center">
-        <div class="block ">
-          <button id="hamburger-btn" class="text-white focus:outline-none">
-            <svg class="w-12 h-12 text-#460000" fill="none" stroke="#460000" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M4 6h16M4 12h16M4 18h16"></path>
-            </svg>          </button>
-        </div>        <!-- Hamburger Button -->
-        <div class="flex">
-          <input type="number" id="disks-count-input" class="rounded-lg bg-[#460000] text-white text-center pl-3 text-[20px]" min="1" max="10" value="3">
-
-          <button id="restart-game" class="restart-game-btn px-4 py-2 flex items-center space-x-2 text-[30px]">
-
-            <i class="fas fa-redo-alt text-[#460000]" ></i>
-          </button>
-        </div>
+       
       </div>
-      <!-- Hamburger Menu -->
-      <div id="hamburger-menu" class="hamburger-menu absolute  bg-[#460000] w-[400px] rounded-lg">
-        <ul class="mt-4 p-4 ">
-          <li class="text-center"><a href="#" class="block px-4 py-2  text-[#C3D7DA]  hover:bg-gray-700">Home</a></li>
-          <li class="text-center"><a href="#" class="block px-4 py-2  text-[#C3D7DA] hover:bg-gray-700">Les Personnes du projet</a></li>
-          <li class="text-center"> <a href="#" class="block px-4 py-2  text-[#C3D7DA] hover:bg-gray-700">Donne moi les truc a faire ici aussi</a></li>
-        </ul>
-      </div>
+     
     </nav>
-        <div class="mt-[5%] w-screen">
-      <canvas id="canvas"  class="  mt-[10%]"></canvas>
+        <div class="mt-[5%] w-screen h-screen">
+          <!-- Declaration du canvas -->
+      <canvas id="canvas"  class="  mt-[10%] "></canvas>
     </div>
    
   
@@ -61,20 +44,20 @@
     <div id="victory-notification" class=" p-1 w-[200px]"  >
      
         
+      <!-- Notification de victoire -->
           
       <div class=" flex flex-col items-center justify-center my-2">
-        <p class="mb-[1rem]">Victory!</p>
+        <p class="mb-[1rem]">Victoire</p>
 
        
-         
-        <input class="rounded-lg text-center bg-[#460000]" id="disks-count" type="text" size="2" maxlength="2" value="3" /> 
+         <!-- Button rejouer -->
+        <input max="7" class="rounded-lg text-center bg-[#460000] w-[50px]" id="disks-count" type="number" size="2" maxlength="2" value="3" /> 
         <button id="play-again" class="restart-game-btn px-4 py-2 flex items-center space-x-2 text-[30px]">
 
           <i class="fas fa-redo-alt " ></i>
         </button>
       </div>
         
-      <script  src="js/confetti.min.js"></script>
 
   </div>
     <div id="debug"></div>
