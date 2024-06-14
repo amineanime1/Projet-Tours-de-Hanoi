@@ -1,6 +1,7 @@
 # Projet Pluridisciplinaire : Tours d'Hanoï
 
 Ce projet est réalisé dans le cadre du module "Projet Pluridisciplinaire" prévu du 11/03 au 21/05. Il comprend plusieurs implémentations et visualisations de l'algorithme de résolution des tours d'Hanoï en utilisant différents langages et plateformes. 
+![Alt](https://repobeats.axiom.co/api/embed/3108e8b623cf02400cc8c7deb982223576860953.svg "Repobeats analytics image")
 
 ## Structure du Projet
 
